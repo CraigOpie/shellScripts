@@ -6,8 +6,8 @@ This command allows you to create a directory (mkdir) or a directory path and th
 
 ### Installation
 There are two options.  
-- Create a separate file, ensure it is executable, and add it to a directory in your path.
-- Add the function to the bottom of your .bashrc file.
+- Create a separate file, ensure it is executable, add it to a directory in your path, source the file in your '.bash_profile'.  Now source your '.bash_profile' file.
+- Add the function to the bottom of your .bashrc file then source your .bashrc file.
 
 ### Usage of 'mcdir'
 ```bash
