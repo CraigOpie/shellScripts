@@ -32,6 +32,7 @@ Add the following to the bottom of your file:
 export PATH="/opt/local/sbin:$PATH"
 ```
 Press 'ctrl+x' then press 'y' to save changes and press 'enter' to write the changes and exit the editor. 
+
 (Required for MacOS only) Now we need to source the file into our bash each time our terminal is started.  To do this, we need to add the source to our .bash_profile file.  Start by opening your .bash_profile file:
 ```bash
 nano ~/.bash_profile
