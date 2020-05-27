@@ -2,16 +2,12 @@
 # This file is used to create a directory and then immediately cd into it
 # using pre-existing libraries to ensure robust application
 mcdir() {
-  ## last argument should always be the directory to create
-  DIR=$#
-  
   ## display the help menu
   if [ $# -eq 0 ] || [ $1 = "-h" ] || [ $1 = "--help" ]
     then
       echo "Usage: [option...] {directory}"
       echo "   -m, --mode                  Sets the access mode for the new directory     "
       echo "   -p, --path                  Create all directories in path                 "
-      echo "   -v, --verbose               Displays a message for every directory created "
       echo "   -h, --help                  Shows this helpful information                 "
       echo
       return 0
@@ -25,22 +21,20 @@ mcdir() {
   fi
 
   ## load the arguments
-  for arg
+  while [ "$1" != "" ]
     do
-      if [ $arg = "-m" ] || [ $arg = "--mode" ]
+      DIR="$1"
+      if [ $1 = "-m" ] || [ $1 = "--mode" ]
         then
-          arg++
+          shift
           MODE=true
-          ACCESS=$arg
+          ACCESS=$1
       fi
-      if [ $arg = "-p" ] || [ $arg = "--path" ]
+      if [ $1 = "-p" ] || [ $1 = "--path" ]
         then
           MKPATH=true
       fi
-      if [ $arg = "-v" ] || [ $arg = "--verbose" ]
-        then
-          VERBOSE=true
-      fi
+      shift
   done
 
   ## execute function based on arguments provided
@@ -48,39 +42,7 @@ mcdir() {
     then
       if [ "$MKPATH" = true ]
         then
-          if [ "$VERBOSE" = true ]
-            then
-              mkdir -m $ACCESS -p -v $DIR &>/dev/null
-              if [ $? -gt 0 ]
-                then
-                  echo "There was a problem creating your directory."
-                  return 1
-              fi
-              cd "$DIR" &>/dev/null
-              if [ $? -gt 0 ]
-                then
-                  echo "Unable to change into that directory."
-                  return 1
-              fi
-              return 0
-          fi
           mkdir -m $ACCESS -p $DIR &>/dev/null
-          if [ $? -gt 0 ]
-            then
-              echo "There was a problem creating your directory."
-              return 1
-          fi
-          cd "$DIR" &>/dev/null
-          if [ $? -gt 0 ]
-            then
-              echo "Unable to change into that directory."
-              return 1
-          fi
-          return 0
-      fi
-      if [ "$VERBOSE" = true ]
-        then
-          mkdir -m $ACCESS -v $DIR &>/dev/null
           if [ $? -gt 0 ]
             then
               echo "There was a problem creating your directory."
@@ -110,39 +72,7 @@ mcdir() {
   fi
   if [ "$MKPATH" = true ]
     then
-      if [ "$VERBOSE" = true ]
-        then
-          mkdir -p -v $DIR &>/dev/null
-          if [ $? -gt 0 ]
-            then
-              echo "There was a problem creating your directory."
-              return 1
-          fi
-          cd "$DIR" &>/dev/null
-          if [ $? -gt 0 ]
-            then
-              echo "Unable to change into that directory."
-              return 1
-          fi
-          return 0
-      fi
       mkdir -p $DIR &>/dev/null
-      if [ $? -gt 0 ]
-        then
-          echo "There was a problem creating your directory."
-          return 1
-      fi
-      cd "$DIR" &>/dev/null
-      if [ $? -gt 0 ]
-        then
-          echo "Unable to change into that directory."
-          return 1
-      fi
-      return 0
-  fi
-  if [ "$VERBOSE" = true ]
-    then
-      mkdir -v $DIR &>/dev/null
       if [ $? -gt 0 ]
         then
           echo "There was a problem creating your directory."
