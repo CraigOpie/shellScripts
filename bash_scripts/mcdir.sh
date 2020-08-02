@@ -1,7 +1,7 @@
 #!/bin/bash
 # This file is used to create a directory and then immediately cd into it
 # using pre-existing libraries to ensure robust application
-mcdir() {
+function mcdir() {
   ## display the help menu
   if [ $# -eq 0 ] || [ $1 = "-h" ] || [ $1 = "--help" ]
     then
@@ -12,6 +12,13 @@ mcdir() {
       echo
       return 0
   fi
+
+  ## set default variables
+  MODE=false
+  MKPATH=false
+  STDMK=true
+  ACCESS=777
+  DIR="$1"
 
   ## print version
   if [ $1 = "--version" ]
@@ -28,11 +35,13 @@ mcdir() {
         then
           shift
           MODE=true
+          STDMK=false
           ACCESS=$1
       fi
       if [ $1 = "-p" ] || [ $1 = "--path" ]
         then
           MKPATH=true
+          STDMK=false
       fi
       shift
   done
@@ -73,6 +82,22 @@ mcdir() {
   if [ "$MKPATH" = true ]
     then
       mkdir -p $DIR &>/dev/null
+      if [ $? -gt 0 ]
+        then
+          echo "There was a problem creating your directory."
+          return 1
+      fi
+      cd "$DIR" &>/dev/null
+      if [ $? -gt 0 ]
+        then
+          echo "Unable to change into that directory."
+          return 1
+      fi
+      return 0
+  fi
+  if [ "$STDMK" = true ]
+    then
+      mkdir $DIR &>/dev/null
       if [ $? -gt 0 ]
         then
           echo "There was a problem creating your directory."
