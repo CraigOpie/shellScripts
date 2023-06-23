@@ -1,12 +1,13 @@
 #!/bin/bash
-# This file is used to get USB mount points in /dev/ without question
-# this is a timesaver for those who know
+# This script lists all USB devices currently connected to the system.
+# For each device, it lists the device file and the serial number.
+
 for sysdevpath in $(find /sys/bus/usb/devices/usb*/ -name dev); do
     (
         syspath="${sysdevpath%/dev}"
-        devname="$(udevadm info -q name -p $syspath)"
+        devname="$(udevadm info --query=name --path=$syspath)"
         [[ "$devname" == "bus/"* ]] && exit
-        eval "$(udevadm info -q property --export -p $syspath)"
+        eval "$(udevadm info --query=property --export --path=$syspath)"
         [[ -z "$ID_SERIAL" ]] && exit
         echo "/dev/$devname - $ID_SERIAL"
     )
